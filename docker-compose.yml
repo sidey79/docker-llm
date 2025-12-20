@@ -4,7 +4,7 @@ services:
   ollama:
     image: docker.io/ollama/ollama:0.13.5
     volumes:
-      - ./ollama:/root/.ollama
+      - ${BASE_STACK_DIR}/models:/root/.ollama
     environment:
       - GENERIC_TIMEZONE=Europe/Berlin
     ports:
@@ -15,7 +15,7 @@ services:
       [
         "/bin/bash",
         "-c",
-        "ollama serve & sleep 5 && ollama pull hf.co/mradermacher/tinyllama-german-GGUF:Q5_K_M && ollama pull pedrovillalobos/mxbai-embed-large-no-gpu:latest && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",
+        "ollama serve & sleep 5 && ollama pull hf.co/akjindal53244/Llama-3.1-Storm-8B-GGUF:Q4_K_M  && ollama pull pedrovillalobos/mxbai-embed-large-no-gpu:latest && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",
       ]
     restart: always
 
