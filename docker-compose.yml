@@ -11,7 +11,12 @@ services:
       - '11434:11434'
     networks:
       - proxy_net
-    command: /bin/sh -c "ollama pull llama3.2:1b && ollama serve"
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "ollama serve & sleep 5 && ollama pull llama3.2:1b && wait",
+      ]
     restart: always
 
 networks:
