@@ -15,7 +15,7 @@ services:
       [
         "/bin/bash",
         "-c",
-        "ollama serve & sleep 5 && ollama pull llama3.2:1b && wait",
+        "ollama serve & sleep 5 && ollama pull llama3.2:1b && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",
       ]
     restart: always
 
