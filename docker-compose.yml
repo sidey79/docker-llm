@@ -3,20 +3,21 @@ name: LLM Stack
 services:
   ollama:
     image: docker.io/ollama/ollama:0.13.5
-    depends_on:
     volumes:
       - ./ollama:/root/.ollama
     environment:
       - GENERIC_TIMEZONE=Europe/Berlin
     ports:
       - '11434:11434'
-    command: >
-      ollama pull llama3.2:1b &&
-      ollama serve
-   networks:
+    networks:
       - proxy_net
+    entrypoint:
+      [
+        "/bin/bash",
+        "-c",
+        "ollama serve & sleep 5 && ollama pull llama3.2:1b && wait",
+      ]
     restart: always
-    links:
 
 networks:
   proxy_net:
