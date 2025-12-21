@@ -2,11 +2,18 @@ name: LLM Stack
 
 services:
   ollama:
-    image: docker.io/ollama/ollama:0.13.5
+    image: intelanalytics/ipex-llm-inference-cpp-xpu:2.3.0-SNAPSHOT
     volumes:
       - ${BASE_STACK_DIR}/models:/root/.ollama
     environment:
       - GENERIC_TIMEZONE=Europe/Berlin
+      - no_proxy=localhost,127.0.0.1
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_INTEL_GPU=true
+      - OLLAMA_NUM_GPU=999
+      - ZES_ENABLE_SYSMAN=1
+      - SYCL_CACHE_PERSISTENT=1
+      - DEVICE=iGPU
     ports:
       - '11434:11434'
     networks:
@@ -15,7 +22,8 @@ services:
       [
         "/bin/bash",
         "-c",
-        "ollama serve & sleep 5 && ollama pull hf.co/akjindal53244/Llama-3.1-Storm-8B-GGUF:Q4_K_M  && ollama pull pedrovillalobos/mxbai-embed-large-no-gpu:latest && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",
+        "mkdir -p /llm/ollama && cd /llm/ollama && init-ollama && exec ./ollama serve",
+        "&& sleep 5 && ollama pull pedrovillalobos/mxbai-embed-large-no-gpu:latest && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",
       ]
     restart: always
 
