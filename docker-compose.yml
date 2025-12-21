@@ -2,11 +2,11 @@ name: LLM Stack
 
 services:
   ollama:
-    image: intelanalytics/ipex-llm-inference-cpp-xpu:2.3.0-SNAPSHOT
+    image: docker.io/ollama/ollama:0.13.5
     volumes:
       - ${BASE_STACK_DIR}/models:/root/.ollama
     environment:
-      - GENERIC_TIMEZONE=Europe/Berlin
+      - TZ=Europe/Berlin
     ports:
       - '11434:11434'
     networks:
@@ -15,8 +15,11 @@ services:
       [
         "/bin/bash",
         "-c",
-        "mkdir -p /llm/ollama && cd /llm/ollama && init-ollama && exec ./ollama serve",
-        "&& sleep 5 && ollama pull pedrovillalobos/mxbai-embed-large-no-gpu:latest && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",      
+        "ollama serve && sleep 5",
+        "&& ollama pull all-minilm",
+        "&& ollama pull pedrovillalobos/mxbai-embed-large-no-gpu:latest",
+        "&& ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M",
+        "&& wait"
       ]
     restart: always
 
