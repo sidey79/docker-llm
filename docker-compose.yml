@@ -5,6 +5,7 @@ services:
     image: intelanalytics/ipex-llm-inference-cpp-xpu:2.3.0-SNAPSHOT
     volumes:
       - ${BASE_STACK_DIR}/models:/root/.ollama
+    devices:
       - /dev/dri:/dev/dri
     environment:
       - TZ=Europe/Berlin
