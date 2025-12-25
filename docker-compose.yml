@@ -24,7 +24,7 @@ services:
       [
         "/bin/bash",
         "-c",
-        "mkdir -p /llm/ollama && cd /llm/ollama && init-ollama && exec ./ollama serve"
+        "/llm/scripts/start-ollama.sh"
       ]
     restart: always
 
