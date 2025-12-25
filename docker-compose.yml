@@ -5,6 +5,7 @@ services:
     image: intelanalytics/ipex-llm-inference-cpp-xpu:2.3.0-SNAPSHOT
     volumes:
       - ${BASE_STACK_DIR}/models:/root/.ollama
+      - entry.sh:/entry.sh
     devices:
       - /dev/dri:/dev/dri
     environment:
@@ -21,13 +22,7 @@ services:
     networks:
       - proxy_net
     entrypoint:
-      [
-        "/bin/bash",
-        "-c",
-        "cd /llm/scripts && ",
-        "source ipex-llm-init --gpu --device $DEVICE &&",
-        "/llm/scripts/start-ollama.sh"
-      ]
+      - "/entry.sh"
     restart: always
 
 networks:
