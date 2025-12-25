@@ -24,6 +24,8 @@ services:
       [
         "/bin/bash",
         "-c",
+        "cd /llm/scripts && ",
+        "source ipex-llm-init --gpu --device $DEVICE &&",
         "/llm/scripts/start-ollama.sh"
       ]
     restart: always
