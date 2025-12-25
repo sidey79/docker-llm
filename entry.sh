@@ -1,4 +1,13 @@
-cd /llm/scripts/
-# (optional) set the recommended Env , it might cause err. When meet err, you can directly start ollama without set the env. 
-source ipex-llm-init --gpu --device $DEVICE
-bash start-ollama.sh # ctrl+c to exit, and the ollama serve will run on the background
+#!/bin/bash
+export PATH=/llm/ollama:$PATH
+mkdir -p /llm/ollama
+cd /llm/ollama
+
+init-ollama
+export OLLAMA_NUM_GPU=999
+export ZES_ENABLE_SYSMAN=1
+export GGML_SYCL_DEBUG=1
+exec ollama serve
+
+# start ollama service
+#(./ollama serve > ollama.log)

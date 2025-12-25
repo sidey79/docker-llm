@@ -5,7 +5,7 @@ services:
     image: intelanalytics/ipex-llm-inference-cpp-xpu:2.3.0-SNAPSHOT
     volumes:
       - ${BASE_STACK_DIR}/models:/root/.ollama
-      - entry.sh:/entry.sh
+      - ./entry.sh:/entry.sh
     devices:
       - /dev/dri:/dev/dri
     environment:
@@ -17,12 +17,13 @@ services:
       - DEVICE=iGPU
       - ZES_ENABLE_SYSMAN=1 
       - OLLAMA_NUM_PARALLEL=1
+
     ports:
       - '11434:11434'
     networks:
       - proxy_net
     entrypoint:
-      - "/entry.sh"
+      [ "/bin/bash", "-c", "/entry.sh" ]
     restart: always
 
 networks:
