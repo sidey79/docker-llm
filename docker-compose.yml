@@ -13,11 +13,11 @@ services:
       - no_proxy=localhost,127.0.0.1
       - OLLAMA_HOST=0.0.0.0
       - OLLAMA_INTEL_GPU=true
-      - OLLAMA_NUM_GPU=999
       - DEVICE=iGPU
-      - ZES_ENABLE_SYSMAN=1 
-      - OLLAMA_NUM_PARALLEL=1
-
+      - OLLAMA_NUM_PARALLEL=${OLLAMA_NUM_PARALLEL}
+      - OLLAMA_NUM_GPU=${OLLAMA_NUM_GPU}
+      - ZES_ENABLE_SYSMAN=${ZES_ENABLE_SYSMAN}
+      - GGML_SYCL_DEBUG=${GGML_SYCL_DEBUG}
     ports:
       - '11434:11434'
     networks:
