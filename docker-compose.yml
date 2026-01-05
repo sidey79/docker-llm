@@ -1,22 +1,56 @@
 name: LLM Stack
 
 services:
-  ollama:
-    image: docker.io/ollama/ollama:0.13.5
+  ollama-igpu:
+    profiles:
+      - intel_xpu
+    image: intelanalytics/ipex-llm-inference-cpp-xpu:2.3.0-SNAPSHOT
     volumes:
-      - ./ollama:/root/.ollama
+      - ${BASE_STACK_DIR}/models:/root/.ollama
+      - ./entry.sh:/entry.sh
+    devices:
+      - /dev/dri:/dev/dri
     environment:
-      - GENERIC_TIMEZONE=Europe/Berlin
+      - TZ=Europe/Berlin
+      - no_proxy=localhost,127.0.0.1
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_INTEL_GPU=true
+      - DEVICE=${DEVICE}
+      - OLLAMA_NUM_PARALLEL=${OLLAMA_NUM_PARALLEL}
+      - OLLAMA_NUM_GPU=${OLLAMA_NUM_GPU}
+      - ZES_ENABLE_SYSMAN=${ZES_ENABLE_SYSMAN}
+      - GGML_SYCL_DEBUG=${GGML_SYCL_DEBUG}
     ports:
       - '11434:11434'
     networks:
       - proxy_net
     entrypoint:
-      [
-        "/bin/bash",
-        "-c",
-        "ollama serve & sleep 5 && ollama pull llama3.2:1b && ollama pull phi3:3.8b-mini-4k-instruct-q4_K_M && wait",
-      ]
+      [ "/bin/bash", "-c", "/entry.sh" ]
+    restart: always
+
+  ollama-cpu:
+    profiles:
+      - standard
+    image: ollama/ollama:0.13.5
+    volumes:
+      - ${BASE_STACK_DIR}/models:/root/.ollama
+      - ./entry.sh:/entry.sh
+    environment:
+      - TZ=Europe/Berlin
+      - no_proxy=localhost,127.0.0.1
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_INTEL_GPU=false # Wichtig für entry.sh
+      - DEVICE=${DEVICE}
+      - OLLAMA_NUM_PARALLEL=${OLLAMA_NUM_PARALLEL}
+      - OLLAMA_NUM_GPU=${OLLAMA_NUM_GPU}
+      - ZES_ENABLE_SYSMAN=${ZES_ENABLE_SYSMAN}
+      - GGML_SYCL_DEBUG=${GGML_SYCL_DEBUG}
+    ports:
+      - '11434:11434'
+    networks:
+      - proxy_net
+    entrypoint:
+      [ "/bin/bash", "-c", "/entry.sh" ]
     restart: always
 
 networks:
