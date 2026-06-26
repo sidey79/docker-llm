@@ -31,7 +31,7 @@ services:
   ollama-cpu:
     profiles:
       - standard
-    image: ollama/ollama:0.17.7@sha256:0ff452f6a4c3c5bb4ab063a1db190b261d5834741a519189ed5301d50e4434d1
+    image: ollama/ollama:0.30.10@sha256:bfc9c6d53cc6989aa5131a6fde6b162b2802d4d337657f3253b5f69579bddeee
     volumes:
       - ${BASE_STACK_DIR}/models:/root/.ollama
       - ./entry.sh:/entry.sh
